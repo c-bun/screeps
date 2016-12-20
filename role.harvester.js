@@ -12,7 +12,7 @@ var roleHarvester = {
                 }
                 var sources = creep.room.find(FIND_SOURCES);
                 for (i = 0; i < sources.length; i++) {
-                    if (creep.room.memory.source_coverage[sources[i].id] || creep.room.memory.source_coverage[sources[i].id] < 2) {
+                    if (!(creep.room.memory.source_coverage[sources[i].id]) || creep.room.memory.source_coverage[sources[i].id] < 2) {
                         toHarvest = sources[i];
                         creep.room.memory.source_coverage[sources[i].id]++;
                         creep.memory.source = sources[i].id;
