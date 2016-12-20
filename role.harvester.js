@@ -20,6 +20,7 @@ var roleHarvester = {
                 }
             }
             if (creep.harvest(toHarvest) == ERR_NOT_IN_RANGE) {
+              console.log(creep.name , " moving to " , toHarvest.id)
                 creep.moveTo(toHarvest);
             }
         } else {
