@@ -1,9 +1,23 @@
-var roleHarvester = require('role.harvester');
+
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
-var roleCarrier = require('role.carrier')
+var roleCarrier = require('role.carrier');
+var managerHarvester = require('manager.harvesters');
 
 module.exports.loop = function () {
+
+//instantiate managers for each room if rooms do not contain any
+  //harvesters: pass in location and number of sources
+for (var room in Memory.rooms) {
+  if(!room.managers) {
+    //instantiate
+    room.managers[harvesters] = managerHarvester
+  } else {
+    //tell all to manage
+  }
+}
+
+//run 'manage' method of each manager
 
     for(var name in Memory.creeps) {
         if(!Game.creeps[name]) {
