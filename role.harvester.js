@@ -1,4 +1,5 @@
 /** @param {Room} room **/
+// TODO eventually this should inherit from the creep class.
 function roleHarvester(sourceId) {
     this.sourceId = sourceId
         // TODO need to eliminate 'Spawn1' from following call.

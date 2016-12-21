@@ -15,20 +15,28 @@ function managerHarvester(room, numHarvesters) {
         if (this.harvesters.length < this.targetNumHarvesters) {
             var sourceIdToAssn;
             for (var sourceId in this.harvesterAssignments) {
-                if (this.harvesterAssignments.sourceId.length < (this.targetNumHarvesters / this.sources.length)) {
+                if (this.harvesterAssignments.sourceId < (this.targetNumHarvesters / this.sources.length)) {
                     sourceIdToAssn = sourceId;
                 }
             }
             var newName = new roleHarvester(sourceIdToAssn);
             console.log('Spawning new harvester: ' + newName.creep);
             this.harvesters.push(newName);
-            this.harvesterAssignments.sourceIdToAssn.push(newName);
+            this.harvesterAssignments.sourceIdToAssn += 1;
         }
 
         // readjust staff distribution?
         // call 'run' on all harvesters
         for(var creep in this.harvesters) {
                 roleHarvester.run(creep);
+        }
+        for (var name in this.harvesters.creep) {
+            if (!Game.creeps[name]) {
+                sourceToDecrement = name.sourceId;
+                this.harvesterAssignments.sourceToDecrement -= 1;
+                delete Memory.creeps[name];
+                console.log('Clearing non-existing creep memory:', name);
+            }
         }
     }
 }
