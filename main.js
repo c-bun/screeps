@@ -5,6 +5,8 @@ var managerHarvester = require('manager.harvester');
 
 module.exports.loop = function() {
 
+  managerHarvester.manage(4);
+
     for (var name in Memory.creeps) {
         if (!Game.creeps[name]) {
             delete Memory.creeps[name];
