@@ -1,3 +1,5 @@
+var subroutines = require('subroutines');
+
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
@@ -5,7 +7,7 @@ var roleUpgrader = {
 
         if(creep.memory.upgrading && creep.carry.energy == 0) {
             creep.memory.upgrading = false;
-            creep.say('harvesting');
+            creep.say('withdrawing');
         }
         if(!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
             creep.memory.upgrading = true;
@@ -18,10 +20,7 @@ var roleUpgrader = {
             }
         }
         else {
-            var sources = creep.room.find(FIND_SOURCES);
-            if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(sources[0]);
-            }
+            subroutines.withdrawEnergy(creep);
         }
     }
 };

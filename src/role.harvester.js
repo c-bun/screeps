@@ -1,9 +1,17 @@
+var subroutines = require('subroutines');
 var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
         if (creep.carry.energy < creep.carryCapacity) {
-            var toHarvest = creep.room.find(FIND_SOURCES);
+            var toHarvest;
+
+            if (creep.memory.sourceId) {
+                toHarvest = Game.getObjectById(creep.memory.sourceId);
+            } else {
+                toHarvest = creep.room.find(FIND_SOURCES)[0];
+            }
+
             // TODO This method of allocation works! need to implement with manager
             // if (creep.memory.sourceId) {
             //     toHarvest = Game.getObjectById(creep.memory.sourceId);
@@ -21,23 +29,10 @@ var roleHarvester = {
             //     }
             // }
             if (creep.harvest(toHarvest) == ERR_NOT_IN_RANGE) {
-              console.log(creep.name , " moving to " , toHarvest.id)
                 creep.moveTo(toHarvest);
             }
         } else {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (structure) => {
-                    return (structure.structureType ==
-                            STRUCTURE_EXTENSION || structure.structureType ==
-                            STRUCTURE_SPAWN) &&
-                        structure.energy < structure.energyCapacity;
-                }
-            });
-            if (targets.length > 0) {
-                if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0]);
-                }
-            }
+            subroutines.depositEnergy(creep);
         }
     }
 };

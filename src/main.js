@@ -1,34 +1,51 @@
-// TESTING GRUNT
 var roleUpgrader = require('role.upgrader');
-var roleBuilder = require('role.builder');
-var roleCarrier = require('role.carrier');
 var managerHarvester = require('manager.harvester');
+var managerCarrier = require('manager.carrier');
+var managerBuilder = require('manager.builder');
+var managerUpgrader = require('manager.upgrader');
 
 module.exports.loop = function() {
 
-  managerHarvester.manage(4);
+    var NUM_BUILDERS = 2;
+    var NUM_UPGRADERS = 2;
+    var NUM_HARVESTERS = 4;
+    var NUM_CARRIERS = 1;
+
+    for (var room in Game.rooms) {
+        // create this room in memory if not present.
+        if (!Memory.rooms[room]) {
+            Memory.rooms[room] = {};
+        }
+        var currentRoom = Game.rooms[room];
+        var roles = ['builder', 'upgrader','harvester','carrier'];
+        var roleCounts = {};
+        for (var roles_i in roles) {
+            var role = roles[roles_i];
+            roleCounts[role] = _.filter(Game.creeps, (creep) => creep.memory.role == role).length;
+        }
+        // begin to specify building sequence.
+        managerBuilder.manage(2);
+        if (roleCounts['builder'] == NUM_BUILDERS) {
+            managerUpgrader.manage(2);
+        }
+        var containersWithEnergy = currentRoom.find(FIND_STRUCTURES, {
+                filter: (i) => {
+                    return i.structureType == STRUCTURE_CONTAINER;
+                }
+             });
+        if (containersWithEnergy.length > 0) {
+          managerCarrier.manage(1);
+          managerHarvester.manage(4, currentRoom);
+        }
+
+    }
+
 
     for (var name in Memory.creeps) {
         if (!Game.creeps[name]) {
             delete Memory.creeps[name];
             console.log('Clearing non-existing creep memory:', name);
         }
-    }
-
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-
-    if (upgraders.length < 2) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {
-            role: 'upgrader'
-        });
-        //console.log('Spawning new upgrader: ' + newName);
-    }
-    if (builders.length < 3) {
-        var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE], undefined, {
-            role: 'builder'
-        });
-        //console.log('Spawning new builder: ' + newName);
     }
 
     // var tower = Game.getObjectById('TOWER_ID');
@@ -46,13 +63,4 @@ module.exports.loop = function() {
     //     }
     // }
 
-    for (var name in Game.creeps) {
-        var creep = Game.creeps[name];
-        if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        }
-    }
 }
