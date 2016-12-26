@@ -9,7 +9,8 @@ var roleHarvester = {
             if (creep.memory.sourceId) {
                 toHarvest = Game.getObjectById(creep.memory.sourceId);
             } else {
-                toHarvest = creep.room.find(FIND_SOURCES)[0];
+                var sources = creep.room.find(FIND_SOURCES)[0];
+                toHarvest = creep.pos.findClosestByRange(sources);
             }
 
             // TODO This method of allocation works! need to implement with manager

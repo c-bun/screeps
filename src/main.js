@@ -6,10 +6,10 @@ var managerUpgrader = require('manager.upgrader');
 
 module.exports.loop = function() {
 
-    var NUM_BUILDERS = 2;
-    var NUM_UPGRADERS = 2;
-    var NUM_HARVESTERS = 4;
-    var NUM_CARRIERS = 1;
+    var NUM_BUILDERS = 3;
+    var NUM_UPGRADERS = 4;
+    var NUM_HARVESTERS = 8;
+    var NUM_CARRIERS = 2;
 
     for (var room in Game.rooms) {
         // create this room in memory if not present.
@@ -24,9 +24,9 @@ module.exports.loop = function() {
             roleCounts[role] = _.filter(Game.creeps, (creep) => creep.memory.role == role).length;
         }
         // begin to specify building sequence.
-        managerBuilder.manage(2);
+        managerBuilder.manage(NUM_BUILDERS);
         if (roleCounts['builder'] == NUM_BUILDERS) {
-            managerUpgrader.manage(2);
+            managerUpgrader.manage(NUM_UPGRADERS);
         }
         var containersWithEnergy = currentRoom.find(FIND_STRUCTURES, {
                 filter: (i) => {
@@ -34,8 +34,8 @@ module.exports.loop = function() {
                 }
              });
         if (containersWithEnergy.length > 0) {
-          managerCarrier.manage(1);
-          managerHarvester.manage(4, currentRoom);
+          managerCarrier.manage(NUM_CARRIERS);
+          managerHarvester.manage(NUM_HARVESTERS, currentRoom);
         }
 
     }
