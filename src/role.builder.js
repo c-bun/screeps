@@ -3,6 +3,11 @@ var roleBuilder = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+        var targets = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
+            filter: (sites) => {
+                return sites.structureType != STRUCTURE_ROAD;
+            }
+        });
 
         if (creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
@@ -14,11 +19,7 @@ var roleBuilder = {
         }
 
         if (creep.memory.building) {
-            var targets = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
-                filter: (sites) => {
-                    return sites.structureType != STRUCTURE_ROAD;
-                }
-            });
+
             if (targets.length) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
@@ -31,22 +32,26 @@ var roleBuilder = {
                     }
                 } else {
                     // repair things
-                var thingsToRepair = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.hits < (structure.hitsMax * 0.25);
+                    var thingsToRepair = creep.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return structure.hits < (structure.hitsMax * 0.25);
+                        }
+                    });
+                    if (thingsToRepair.length) {
+                        if (creep.repair(thingsToRepair[0]) == ERR_NOT_IN_RANGE) {
+                            creep.moveTo(thingsToRepair[0]);
+                        }
+                    } else {
+                        // deposit
+                        subroutines.depositEnergy(creep);
                     }
-                });
-                if (thingsToRepair.length) {
-                    if (creep.repair(thingsToRepair[0]) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(thingsToRepair[0]);
-                    }
-                } else {
-                  // harvest from nearest source?
-                }
                 }
             }
-        } else {
+        } else if (targets.length > 0) {
             subroutines.withdrawEnergy(creep);
+        } else {
+          var sources = currentRoom.find(FIND_SOURCES);
+          subroutines.harvestEnergy(creep, sources[0]);
         }
     }
 };
