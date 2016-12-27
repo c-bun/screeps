@@ -44,8 +44,14 @@ module.exports.loop = function() {
           managerCarrier.manage(0);
           managerExplorer.manage(0);
           managerDefender.manage(0);
+        } else if (roleCounts['harvester'] < NUM_HARVESTERS) {
+          // add harvesters.
+          managerUpgrader.manage(NUM_UPGRADERS);
+          managerHarvester.manage(NUM_HARVESTERS, currentRoom);
+          managerCarrier.manage(0);
+          managerExplorer.manage(0);
+          managerDefender.manage(0);
         } else {
-          // manage all at correct levels.
           managerUpgrader.manage(NUM_UPGRADERS);
           managerHarvester.manage(NUM_HARVESTERS, currentRoom);
           managerCarrier.manage(NUM_CARRIERS);

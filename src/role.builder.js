@@ -11,16 +11,14 @@ var roleBuilder = {
 
         if (creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
-            creep.say('withdrawing');
         }
         if (!creep.memory.building && creep.carry.energy == creep.carryCapacity) {
             creep.memory.building = true;
-            creep.say('building');
         }
 
         if (creep.memory.building) {
 
-            if (targets.length) {
+            if (targets.length > 0) {
                 if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(targets[0]);
                 }
@@ -44,7 +42,7 @@ var roleBuilder = {
                         }
                     } else {
                         // deposit
-                        subroutines.depositEnergy(creep);
+                        subroutines.depositToSpawn(creep);
                     }
                 }
             }
