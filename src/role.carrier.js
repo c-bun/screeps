@@ -2,7 +2,7 @@ var subroutines = require('subroutines');
 var roleCarrier = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    performDuties: function(creep) {
       if(creep.carry.energy < creep.carryCapacity) {
             subroutines.withdrawEnergy(creep);
           }
@@ -20,6 +20,11 @@ var roleCarrier = {
                     creep.moveTo(targets[0]);
                 }
             }
+              }
+            },
+            run: function(creep) {
+              if (!subroutines.checkRenew(creep)) {
+                this.performDuties(creep);
               }
             }
 

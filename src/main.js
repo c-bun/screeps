@@ -9,7 +9,7 @@ module.exports.loop = function() {
 
     var NUM_BUILDERS = 3;
     var NUM_UPGRADERS = 1;
-    var NUM_HARVESTERS = 8;
+    var NUM_HARVESTERS = 4;
     var NUM_CARRIERS = 2;
     var NUM_EXPLORERS = 1;
     var NUM_DEFENDERS = 2;
@@ -27,7 +27,7 @@ module.exports.loop = function() {
             roleCounts[role] = _.filter(Game.creeps, (creep) => creep.memory.role == role).length;
         }
         // begin to specify building sequence.
-        managerBuilder.manage(NUM_BUILDERS);
+        managerBuilder.manage(NUM_BUILDERS, currentRoom);
         console.log('num builders: ', roleCounts['builder']);
         // if not enough builders, run all but don't spawn new other roles
         if (roleCounts['builder'] < NUM_BUILDERS) {

@@ -2,7 +2,7 @@ var subroutines = require('subroutines');
 var roleBuilder = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    performDuties: function(creep) {
         var targets = creep.room.find(FIND_MY_CONSTRUCTION_SITES, {
             filter: (sites) => {
                 return sites.structureType != STRUCTURE_ROAD;
@@ -34,12 +34,13 @@ var roleBuilder = {
                     // repair things
                     var thingsToRepair = creep.room.find(FIND_STRUCTURES, {
                         filter: (structure) => {
-                            return structure.hits < (structure.hitsMax * 0.25);
+                            return structure.hits < (structure.hitsMax * 0.5);
                         }
                     });
                     if (thingsToRepair.length) {
-                        if (creep.repair(thingsToRepair[0]) == ERR_NOT_IN_RANGE) {
-                            creep.moveTo(thingsToRepair[0]);
+                        var closest = creep.pos.findClosestByRange(thingsToRepair);
+                        if (creep.repair(closest) == ERR_NOT_IN_RANGE) {
+                            subroutines.moveToMinCPU(creep, closest);
                         }
                     } else {
                         // deposit
@@ -50,9 +51,15 @@ var roleBuilder = {
         } else if (targets.length > 0) {
             subroutines.withdrawEnergy(creep);
         } else {
-          var sources = currentRoom.find(FIND_SOURCES);
-          subroutines.harvestEnergy(creep, sources[0]);
+            var sources = creep.room.find(FIND_SOURCES);
+            var closest = creep.pos.findClosestByRange(sources);
+            subroutines.harvestEnergy(creep, closest);
         }
+    },
+    run: function(creep) {
+      if (!subroutines.checkRenew(creep)) {
+        this.performDuties(creep);
+      }
     }
 };
 

@@ -22,7 +22,7 @@ var managerHarvester = {
         // check number of harvesters
         if (harvesters.length < harvesterCount) {
             // spawn harvesters
-            var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, MOVE, MOVE], undefined, {
+            var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK, CARRY, CARRY, MOVE], undefined, {
                 role: 'harvester'
             });
             console.log('Calling for new harvester: ' + newName);

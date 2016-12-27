@@ -1,7 +1,7 @@
 var roleRepairer = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    performDuties: function(creep) {
 
         if(creep.memory.building && creep.carry.energy == 0) {
             creep.memory.building = false;
@@ -36,6 +36,11 @@ var roleRepairer = {
                 creep.moveTo(sources[0]);
             }
         }
+    },
+    run: function(creep) {
+      if (!subroutines.checkRenew(creep)) {
+        this.performDuties(creep);
+      }
     }
 };
 

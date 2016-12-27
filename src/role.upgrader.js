@@ -3,7 +3,7 @@ var subroutines = require('subroutines');
 var roleUpgrader = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    performDuties: function(creep) {
 
         if(creep.memory.upgrading && creep.carry.energy == 0) {
             creep.memory.upgrading = false;
@@ -22,6 +22,11 @@ var roleUpgrader = {
         else {
             subroutines.withdrawEnergy(creep);
         }
+    },
+    run: function(creep) {
+      if (!subroutines.checkRenew(creep)) {
+        this.performDuties(creep);
+      }
     }
 };
 

@@ -2,7 +2,7 @@ var subroutines = require('subroutines');
 var roleExplorer = {
 
     /** @param {Creep} creep **/
-    run: function(creep) {
+    performDuties: function(creep) {
         if (Game.flags.Flag1 && (creep.room.name != Game.flags.Flag1.room.name)) {
             creep.moveTo(Game.flags.Flag1);
         } else if (creep.room.controller && !creep.room.controller.my) {
@@ -17,6 +17,11 @@ var roleExplorer = {
         }
 
 
+    },
+    run: function(creep) {
+      if (!subroutines.checkRenew(creep)) {
+        this.performDuties(creep);
+      }
     }
 
 };

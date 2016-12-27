@@ -62,6 +62,32 @@ var subroutines = {
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
           this.moveToMinCPU(creep, source);
       }
+    },
+    repairClosest: function(creep, threshold) {
+      // repair things
+      var thingsToRepair = creep.room.find(FIND_STRUCTURES, {
+          filter: (structure) => {
+              return structure.hits < (structure.hitsMax * threshold);
+          }
+      });
+      if (thingsToRepair.length > 0) {
+          var closest = creep.pos.findClosestByRange(thingsToRepair);
+          if (creep.repair(closest) == ERR_NOT_IN_RANGE) {
+              subroutines.moveToMinCPU(creep, closest);
+          }
+      }
+    },
+    checkRenew: function(creep) {
+      var needsRenew = false;
+      if (creep.ticksToLive < 100) {
+        needsRenew = true;
+        creep.say('renewing');
+        var closestSpawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+        if (closestSpawn.renewCreep(creep) == ERR_NOT_IN_RANGE) {
+          this.moveToMinCPU(creep, closestSpawn);
+        }
+      }
+      return needsRenew;
     }
 };
 module.exports = subroutines;
