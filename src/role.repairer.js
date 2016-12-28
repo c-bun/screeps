@@ -1,3 +1,4 @@
+var subroutines = require('subroutines');
 var roleRepairer = {
 
     /** @param {Creep} creep **/
@@ -13,7 +14,7 @@ var roleRepairer = {
         }
 
         if(creep.memory.building) {
-          subroutines.repairClosest(creep);
+          subroutines.repairClosest(creep, 0.75);
         } else {
           subroutines.withdrawEnergy(creep);
         }

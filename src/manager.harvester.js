@@ -11,21 +11,20 @@ var managerHarvester = {
         for (var i in sources) {
           var source = sources[i];
           sourceAssignments[source.id] = 0;
-          //console.log(source.id, ' ',sourceAssignments[source.id]);
+          ////console.log(source.id, ' ',sourceAssignments[source.id]);
         }
         for (var i in harvesters) {
           var harvester = harvesters[i];
           sourceAssignments[harvester.memory.sourceId] ++;
-          //console.log(harvester.memory.sourceId, ' ',sourceAssignments[harvester.memory.sourceId]);
+          ////console.log(harvester.memory.sourceId, ' ',sourceAssignments[harvester.memory.sourceId]);
         }
 
         // check number of harvesters
         if (harvesters.length < harvesterCount) {
             // spawn harvesters
-            var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK, CARRY, CARRY, MOVE], undefined, {
+            var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE], undefined, {
                 role: 'harvester'
             });
-            console.log('Calling for new harvester: ' + newName);
         }
 
         // allocate harvesters to sources if not done so.

@@ -6,10 +6,9 @@ var managerDefender = {
         var defenders = _.filter(Game.creeps, (creep) => creep.memory.role == 'defender');
         if (defenders.length < defenderCount) {
             // spawn defenders
-            var newName = Game.spawns['Spawn1'].createCreep([ATTACK, ATTACK, MOVE, MOVE], undefined, {
+            var newName = Game.spawns['Spawn1'].createCreep([ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE], undefined, {
                 role: 'defender'
             });
-            console.log('Spawning new defender: ' + newName);
         }
         for (var name in Game.creeps) {
             var creep = Game.creeps[name];

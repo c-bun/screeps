@@ -6,10 +6,9 @@ var managerExplorer = {
         var explorers = _.filter(Game.creeps, (creep) => creep.memory.role == 'explorer');
         if (explorers.length < explorerCount) {
             // spawn explorers
-            var newName = Game.spawns['Spawn1'].createCreep([CLAIM, CLAIM, MOVE, MOVE], undefined, {
+            var newName = Game.spawns['Spawn1'].createCreep([CLAIM, MOVE], undefined, {
                 role: 'explorer'
             });
-            console.log('Spawning new explorer: ' + newName);
         }
         for (var name in Game.creeps) {
             var creep = Game.creeps[name];

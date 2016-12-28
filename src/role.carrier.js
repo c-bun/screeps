@@ -3,15 +3,15 @@ var roleCarrier = {
 
     /** @param {Creep} creep **/
     performDuties: function(creep) {
-      if(creep.carry.energy < creep.carryCapacity) {
+        if (creep.carry.energy < creep.carryCapacity) {
             subroutines.withdrawEnergy(creep);
-          }
-          else  {
-              var targets = creep.room.find(FIND_STRUCTURES, {
+        } else {
+            var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (structure.structureType ==
                             STRUCTURE_EXTENSION || structure.structureType ==
-                            STRUCTURE_SPAWN) &&
+                            STRUCTURE_SPAWN || structure.structureType ==
+                            STRUCTURE_TOWER) &&
                         structure.energy < structure.energyCapacity;
                 }
             });
@@ -20,13 +20,13 @@ var roleCarrier = {
                     creep.moveTo(targets[0]);
                 }
             }
-              }
-            },
-            run: function(creep) {
-              if (!subroutines.checkRenew(creep)) {
-                this.performDuties(creep);
-              }
-            }
+        }
+    },
+    run: function(creep) {
+        if (!subroutines.checkRenew(creep)) {
+            this.performDuties(creep);
+        }
+    }
 
 };
 

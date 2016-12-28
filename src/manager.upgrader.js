@@ -6,10 +6,10 @@ var managerUpgrader = {
         var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
         if (upgraders.length < upgraderCount) {
             // spawn upgraders
-            var newName = Game.spawns['Spawn1'].createCreep([WORK, CARRY, CARRY, MOVE, MOVE], undefined, {
+            var newName = Game.spawns['Spawn1'].createCreep([WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE], undefined, {
                 role: 'upgrader'
             });
-            console.log('Spawning new upgrader: ' + newName);
+            //console.log('Spawning new upgrader: ' + newName);
         }
         for (var name in Game.creeps) {
             var creep = Game.creeps[name];

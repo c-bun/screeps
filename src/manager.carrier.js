@@ -9,7 +9,6 @@ var managerCarrier = {
             var newName = Game.spawns['Spawn1'].createCreep([CARRY, CARRY, MOVE, MOVE], undefined, {
                 role: 'carrier'
             });
-            console.log('Spawning new carrier: ' + newName);
         }
         for (var name in Game.creeps) {
             var creep = Game.creeps[name];
