@@ -2,21 +2,21 @@ var roomLevels = {
 	1: {
 		number: {
 			harvester: 2,
-			builder: 3,
-			carrier: 0,
+			builder: 0,
+			carrier: 2,
 			defender: 0,
 			explorer: 0,
 			repairer: 0,
-			upgrader: 1
+			upgrader: 2
 		},
 		config: {
-			harvester: [WORK, CARRY, MOVE, MOVE],
+			harvester: [WORK, CARRY, CARRY, MOVE],
 			builder: [WORK, CARRY, MOVE, MOVE],
 			carrier: [CARRY, CARRY, MOVE, MOVE],
 			defender: [ATTACK, ATTACK, MOVE, MOVE],
 			explorer: [CLAIM, MOVE],
 			repairer: [WORK, CARRY, MOVE, MOVE],
-			upgrader: [WORK, CARRY, MOVE, MOVE]
+			upgrader: [WORK, CARRY, CARRY, MOVE]
 		}
 	},
 	2: {

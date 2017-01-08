@@ -2,6 +2,8 @@ var roomLevels = require('roomLevels');
 var roleBuilder = require('role.builder');
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
+var roleCarrier = require('role.carrier');
+
 var managerSpawner = {
 	roles: {
 		builder: function(creep) {
@@ -12,6 +14,9 @@ var managerSpawner = {
 		},
 		upgrader: function(creep) {
 			roleUpgrader.run(creep);
+		},
+		carrier: function(creep) {
+			roleCarrier.run(creep);
 		}
 	},
 	assignSources: function(currentRoom) {
@@ -91,6 +96,10 @@ var managerSpawner = {
 			var role = roles[roles_i];
 			roleCounts[role] = _.filter(Game.creeps, (creep) => creep.memory.role == role).length;
 		}
+		console.log('Job Distribution:');
+		for (var job in roleCounts) {
+			console.log(job, ": ", roleCounts[job])
+		}
 		var callingForSpawn = false;
 		var spawns = currentRoom.find(FIND_MY_SPAWNS);
 		for (var irole in roleCounts) {
@@ -112,10 +121,11 @@ var managerSpawner = {
 
 		// assign harvesters to sources (eventually assign carriers to harvesters too)
 		this.assignSources(currentRoom);
+		this.assignCarriers(currentRoom);
 
 		for (var name in Game.creeps) {
 			var creep = Game.creeps[name];
-			if (creep.memory.level > roomLevel - 1 && creep.ticksToLive < 100) {
+			if (creep.memory.level >= roomLevel - 1 && creep.ticksToLive < 100) {
 				creep.memory.needsRenew = true;
 			}
 			this.roles[creep.memory.role](creep);

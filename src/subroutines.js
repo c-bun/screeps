@@ -130,6 +130,12 @@ var subroutines = {
 		if (creep.build(site) == ERR_NOT_IN_RANGE) {
 			this.moveToMinCPU(creep, site);
 		}
+	},
+	transferFromHarvester: function(creep, harvesterId) {
+		var toTransfer = Game.getObjectById(creep.memory.harvesterId);
+		if (toTransfer.transfer(creep, RESOURCE_ENERGY, toTransfer.carryCapacity) == (ERR_NOT_IN_RANGE || ERR_NOT_ENOUGH_RESOURCES)) {
+			this.moveToMinCPU(creep, toTransfer);
+		}
 	}
 };
 module.exports = subroutines;

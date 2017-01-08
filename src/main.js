@@ -15,7 +15,7 @@ module.exports.loop = function() {
 
 		// somehow asses and assign room level?
 		// assesLevel();
-		var currentRoomLevel = 2;
+		var currentRoomLevel = 1;
 
 		// begin to specify building sequence.
 		managerSpawner.manage(currentRoomLevel, currentRoom);
