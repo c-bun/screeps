@@ -9,8 +9,8 @@ class CreepMaker {
 		this.creepNumbers = {
 			harvester: 2,
 			carrier: 2,
-			upgrader: 1,
-			builder: 0
+			upgrader: 0,
+			builder: 1
 		}
 
 		this.buildOrder = ['harvester', 'carrier', 'upgrader', 'builder'];
@@ -19,7 +19,7 @@ class CreepMaker {
 			harvester: [
 				[WORK, CARRY, MOVE],
 				[WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-				[WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE]
+				[WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
 			],
 			carrier: [
 				[CARRY, MOVE, MOVE],
@@ -40,10 +40,6 @@ class CreepMaker {
 	}
 
 	removeOldCreeps() {
-		// TODO implement the use of spawn.recycleCreep() here. Instead of suicide,
-		// flip switch of recycle in memory to true, then have Role check for
-		// recycle switch while calling renew. make role undefined so that another
-		// can be spawned.
 		if (this.room.memory.checkTick == 25) {
 			var foundOne = false;
 			for (var name in this.creeps) {
@@ -54,7 +50,6 @@ class CreepMaker {
 							dryRun: true
 						}) == OK) {
 						foundOne = true;
-						//this.creeps[name].suicide();
 						this.creeps[name].memory.role = undefined;
 						this.creeps[name].memory.recycle = true;
 					}

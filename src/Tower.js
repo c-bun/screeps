@@ -4,8 +4,11 @@ class Tower {
 		//this.roomStatus = roomStatus;
 	}
 	repair() {
+		// only repairs walls and ramparts
 		var closestDamagedStructure = this.tower.pos.findClosestByRange(FIND_STRUCTURES, {
-			filter: (structure) => structure.hits < structure.hitsMax
+			filter: (structure) => (structure.hits < structure.hitsMax &&
+				(structure.structureType == STRUCTURE_WALL ||
+					structure.structureType == STRUCTURE_RAMPART))
 		});
 		if (closestDamagedStructure) {
 			this.tower.repair(closestDamagedStructure);

@@ -19,6 +19,30 @@ class Builder extends Role {
 		}
 	}
 
+	repair(structure) {
+		if (this.creep.repair(structure) == ERR_NOT_IN_RANGE) {
+			super.moveToMinCPU(structure);
+		}
+	}
+
+	repairClosest(threshold) {
+		// repair things that are not walls or ramparts
+		var madeRepairs = false;
+		var thingsToRepair = this.creep.room.find(FIND_STRUCTURES, {
+			filter: (structure) => {
+				return structure.hits < (structure.hitsMax * threshold) &&
+					(structure.structureType != STRUCTURE_WALL ||
+						structure.structureType != STRUCTURE_RAMPART);
+			}
+		});
+		if (thingsToRepair.length > 0) {
+			madeRepairs = true;
+			var closest = this.creep.pos.findClosestByRange(thingsToRepair);
+			this.repair(closest);
+		}
+		return madeRepairs;
+	}
+
 	run() {
 		if (!super.renew()) {
 			// determine whether building or obtaining energy.
@@ -40,7 +64,7 @@ class Builder extends Role {
 					this.build(prioritySites[0]);
 				} else if (constructionSites.length > 0) {
 					this.build(constructionSites[0]);
-				} else if (!subroutines.repairClosest(this.creep, 0.5)) {
+				} else if (!this.repairClosest(this.creep, 0.5)) {
 					// there are no construction sites or things to repair, thus deposit energy.
 					// TODO fix this. they will put it there and then take it out again.
 					//subroutines.depositToSpawn(this.creep);

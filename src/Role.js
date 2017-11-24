@@ -18,7 +18,7 @@ class Role {
 	}
 
 	depositEnergy() {
-		// Defaults to spawns and extensions, then containers.
+		// Defaults to spawns and extensions, then containers. TODO what about towers?
 		var targets = this.creep.room.find(FIND_STRUCTURES, {
 			filter: (structure) => {
 				return (structure.structureType ==
