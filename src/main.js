@@ -1,53 +1,57 @@
-var managerTower = require('manager.tower');
-var roomLevels = require('roomLevels');
-var managerSpawner = require('manager.spawner');
+var Harvester = require('Harvester')
+var Upgrader = require('Upgrader')
+var Builder = require('Builder')
+var Carrier = require('Carrier')
+var CreepMaker = require('CreepMaker')
+var Economy = require('Economy')
+var _ = require('lodash')
 
 module.exports.loop = function() {
+	for (var currentRoom in Game.rooms) {
 
-	for (var room in Game.rooms) {
+		// set some vars
+		var sources = Game.rooms[currentRoom].find(FIND_SOURCES);
+		var s = 0;
+		var creeps = Game.rooms[currentRoom].find(FIND_MY_CREEPS);
 
-		// create this room in memory if not present.
-		if (!Memory.rooms[room]) {
-			Memory.rooms[room] = {};
+		// initialize some things
+		Game.rooms[currentRoom].memory.roles = {};
+
+		// Distribute jobs and run
+		var harvesters = _.filter(creeps, (creep) => creep.memory.role == 'harvester');
+		Game.rooms[currentRoom].memory.roles.harvester = harvesters.length;
+		for (var name in harvesters) {
+			var creep = new Harvester(harvesters[name], sources[s % sources.length]);
+			s++;
+			creep.run()
+		}
+		var h = 0;
+		var carriers = _.filter(creeps, (creep) => creep.memory.role == 'carrier');
+		Game.rooms[currentRoom].memory.roles.carrier = carriers.length;
+		for (var name in carriers) {
+			var creep = new Carrier(carriers[name], harvesters[h % harvesters.length]);
+			h++;
+			creep.run()
+		}
+		var upgraders = _.filter(creeps, (creep) => creep.memory.role == 'upgrader');
+		Game.rooms[currentRoom].memory.roles.upgrader = upgraders.length;
+		for (var name in upgraders) {
+			var creep = new Upgrader(upgraders[name]);
+			creep.run()
+		}
+		var builders = _.filter(creeps, (creep) => creep.memory.role == 'builder');
+		Game.rooms[currentRoom].memory.roles.builder = builders.length;
+		for (var name in builders) {
+			var creep = new Builder(builders[name]);
+			creep.run()
 		}
 
-		var currentRoom = Game.rooms[room];
+		// Check economy and update room stage if needed
+		var economy = new Economy(Game.rooms[currentRoom]);
+		economy.run();
+		// See if there are any to build
+		var creepMaker = new CreepMaker(Game.rooms[currentRoom], creeps);
+		creepMaker.run();
 
-		// somehow asses and assign room level?
-		// assesLevel();
-		var currentRoomLevel = 1;
-
-		// begin to specify building sequence.
-		managerSpawner.manage(currentRoomLevel, currentRoom);
-
-		// activate safe mode if dying. this is a bit of a hack because it does not ID the spawn in question.
-		if (Game.spawns['Spawn1'].hits < 0.8 * Game.spawns['Spawn1'].hitsMax) {
-			currentRoom.controller.activateSafeMode();
-		}
 	}
-
-
-	for (var name in Memory.creeps) {
-		if (!Game.creeps[name]) {
-			delete Memory.creeps[name];
-		}
-	}
-
-
-
-	// var tower = Game.getObjectById('TOWER_ID');
-	// if(tower) {
-	//     var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-	//         filter: (structure) => structure.hits < structure.hitsMax
-	//     });
-	//     if(closestDamagedStructure) {
-	//         tower.repair(closestDamagedStructure);
-	//     }
-
-	//     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-	//     if(closestHostile) {
-	//         tower.attack(closestHostile);
-	//     }
-	// }
-
 }

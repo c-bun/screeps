@@ -13,9 +13,9 @@ var roleHarvester = {
 				toHarvest = creep.pos.findClosestByRange(sources);
 			}
 			subroutines.harvestEnergy(creep, toHarvest);
-		} else {
+		} else if (creep.memory.carrierIds.length == 0) {
 			// at carry capacity, deposit if no carrier assigned.
-			//subroutines.depositEnergy(creep);
+			subroutines.depositEnergy(creep);
 		}
 	},
 	run: function(creep) {

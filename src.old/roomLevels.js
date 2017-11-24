@@ -21,12 +21,12 @@ var roomLevels = {
 	},
 	2: {
 		number: {
-			harvester: 4,
+			harvester: 6,
 			builder: 3,
-			carrier: 2,
-			defender: 0,
+			carrier: 6,
+			defender: 2,
 			explorer: 0,
-			repairer: 2,
+			repairer: 0,
 			upgrader: 2
 		},
 		config: {

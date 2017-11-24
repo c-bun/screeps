@@ -136,15 +136,10 @@ var subroutines = {
 			this.moveToMinCPU(creep, site);
 		}
 	},
-	// 	transferFromHarvester: function(creep, harvesterId) {
-	// 		var toTransfer = Game.getObjectById(creep.memory.harvesterId);
-	// 		if (toTransfer.transfer(creep, RESOURCE_ENERGY, toTransfer.carryCapacity) == (ERR_NOT_IN_RANGE || ERR_NOT_ENOUGH_RESOURCES)) {
-	// 			this.moveToMinCPU(creep, toTransfer);
-	// 		}
-	// 	},
-	transferFromHarvester: function(creep, harvester) {
-		if (harvester.transfer(creep, RESOURCE_ENERGY, harvester.carryCapacity) == (ERR_NOT_IN_RANGE || ERR_NOT_ENOUGH_RESOURCES)) {
-			this.moveToMinCPU(creep, harvester);
+	transferFromHarvester: function(creep, harvesterId) {
+		var toTransfer = Game.getObjectById(creep.memory.harvesterId);
+		if (toTransfer.transfer(creep, RESOURCE_ENERGY, toTransfer.carryCapacity) == (ERR_NOT_IN_RANGE || ERR_NOT_ENOUGH_RESOURCES)) {
+			this.moveToMinCPU(creep, toTransfer);
 		}
 	},
 	deliverEnergy: function(creep) {

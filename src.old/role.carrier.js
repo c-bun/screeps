@@ -3,7 +3,15 @@ var roleCarrier = {
 
 	/** @param {Creep} creep **/
 	performDuties: function(creep) {
-		if (creep.carry.energy < creep.carryCapacity) {
+		// determine whether picking up.
+		if (creep.memory.dropping_off && creep.carry.energy == 0) {
+			creep.memory.dropping_off = false;
+		}
+		if (!creep.memory.dropping_off && creep.carry.energy == creep.carryCapacity) {
+			creep.memory.dropping_off = true;
+		}
+
+		if (!creep.memory.dropping_off) {
 			//subroutines.withdrawEnergy(creep);
 			subroutines.transferFromHarvester(creep, creep.harvesterId)
 		} else {
@@ -20,6 +28,9 @@ var roleCarrier = {
 				if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 					subroutines.moveToMinCPU(creep, targets[0]);
 				}
+			} else {
+				// try to transfer directly to needy creep?
+				subroutines.deliverEnergy(creep);
 			}
 		}
 	},
