@@ -38,7 +38,9 @@ class CreepMaker {
 	}
 
 	removeOldCreeps() {
-		// TODO implement the use of spawn.recycleCreep() here.
+		// TODO implement the use of spawn.recycleCreep() here. Instead of suicide,
+		// flip switch of recycle in memory to true, then have Role check for
+		// recycle switch while calling renew.
 		if (this.room.memory.checkTick == 25) {
 			var foundOne = false;
 			for (var name in this.creeps) {

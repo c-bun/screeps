@@ -15,7 +15,7 @@ var subroutines = {
 					return i;
 				} else if (
 					(i.structureType == STRUCTURE_SPAWN || i.structureType == STRUCTURE_EXTENSION) &&
-					(i.energy > 0.5 * i.energyCapacity)) {
+					(i.energy > 0.8 * i.energyCapacity)) {
 					return i;
 				}
 			}
