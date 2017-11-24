@@ -9,9 +9,11 @@ class CreepMaker {
 		this.creepNumbers = {
 			harvester: 2,
 			carrier: 2,
-			upgrader: 2,
-			builder: 2
+			upgrader: 1,
+			builder: 0
 		}
+
+		this.buildOrder = ['harvester', 'carrier', 'upgrader', 'builder'];
 
 		this.creepBuilds = {
 			harvester: [
@@ -40,7 +42,8 @@ class CreepMaker {
 	removeOldCreeps() {
 		// TODO implement the use of spawn.recycleCreep() here. Instead of suicide,
 		// flip switch of recycle in memory to true, then have Role check for
-		// recycle switch while calling renew.
+		// recycle switch while calling renew. make role undefined so that another
+		// can be spawned.
 		if (this.room.memory.checkTick == 25) {
 			var foundOne = false;
 			for (var name in this.creeps) {
@@ -51,7 +54,9 @@ class CreepMaker {
 							dryRun: true
 						}) == OK) {
 						foundOne = true;
-						this.creeps[name].suicide();
+						//this.creeps[name].suicide();
+						this.creeps[name].memory.role = undefined;
+						this.creeps[name].memory.recycle = true;
 					}
 				}
 			}
@@ -60,14 +65,18 @@ class CreepMaker {
 
 	// See if there are any to build
 	spawn() {
-		for (var k in this.room.memory.roles) {
-			if (this.room.memory.roles[k] < this.creepNumbers[k]) {
-				var newName = this.spawns[0].spawnCreep(this.creepBuilds[k][this.roomStage], k + Game.time.toString(), {
-					memory: {
-						role: k,
-						stage: this.roomStage
-					}
-				});
+		var foundOne = false;
+		for (var k in this.buildOrder) {
+			var onRole = this.buildOrder[k];
+			if (this.room.memory.roles[onRole] < this.creepNumbers[onRole] && !foundOne) {
+				if (this.spawns[0].spawnCreep(this.creepBuilds[onRole][this.roomStage], onRole + Game.time.toString(), {
+						memory: {
+							role: onRole,
+							stage: this.roomStage
+						}
+					}) == OK) {
+					foundOne = true;
+				}
 			}
 		}
 	}

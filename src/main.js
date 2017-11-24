@@ -2,8 +2,10 @@ var Harvester = require('Harvester')
 var Upgrader = require('Upgrader')
 var Builder = require('Builder')
 var Carrier = require('Carrier')
+var Role = require('Role')
 var CreepMaker = require('CreepMaker')
 var Economy = require('Economy')
+var Defense = require('Defense')
 var _ = require('lodash')
 
 module.exports.loop = function() {
@@ -46,6 +48,14 @@ module.exports.loop = function() {
 			creep.run()
 		}
 
+		var noRoles = _.filter(creeps, (creep) => creep.memory.role == undefined);
+		for (var name in noRoles) {
+			var creep = new Role(noRoles[name]);
+			creep.run()
+		}
+		// Asses room threats and act if necessary
+		var defense = new Defense(Game.rooms[currentRoom]);
+		defense.run();
 		// Check economy and update room stage if needed
 		var economy = new Economy(Game.rooms[currentRoom]);
 		economy.run();

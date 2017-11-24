@@ -47,6 +47,15 @@ class Role {
 		}
 	}
 
+	recycleSelf() {
+		if (this.creep.memory.recycle) {
+			var closestSpawn = this.creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+			if (closestSpawn.recycleCreep(this.creep) == ERR_NOT_IN_RANGE) {
+				this.moveToMinCPU(closestSpawn);
+			}
+		}
+	}
+
 	renew() {
 		if (this.creep.ticksToLive < 200) {
 			this.creep.memory.needsRenew = true;
@@ -67,6 +76,7 @@ class Role {
 	}
 	run() {
 		this.renew();
+		this.recycleSelf();
 	}
 }
 
