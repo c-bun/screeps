@@ -5,6 +5,7 @@ class Role {
 		this.creep = creep;
 		this.stage = this.creep.memory.stage;
 		this.roomStage = this.creep.room.memory.stage;
+		this.underAttack = this.creep.room.memory.underAttack;
 	}
 
 	moveToMinCPU(destination) {
@@ -21,14 +22,24 @@ class Role {
 		// Defaults to spawns and extensions, then containers. TODO what about towers?
 		// Return true if all energy has been deposited. else return false.
 		var depositedAll = false;
-		var targets = this.creep.room.find(FIND_STRUCTURES, {
-			filter: (structure) => {
-				return (structure.structureType ==
-						STRUCTURE_EXTENSION || structure.structureType ==
-						STRUCTURE_SPAWN) &&
-					structure.energy < structure.energyCapacity;
-			}
-		});
+		var targets;
+		if (this.underAttack) {
+			targets = this.creep.room.find(FIND_STRUCTURES, {
+				filter: (structure) => {
+					return structure.structureType == STRUCTURE_TOWER
+				}
+			})
+		} else {
+			targets = this.creep.room.find(FIND_STRUCTURES, {
+				filter: (structure) => {
+					return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity * .25) ||
+						((structure.structureType == STRUCTURE_EXTENSION || structure.structureType ==
+								STRUCTURE_SPAWN) &&
+							structure.energy < structure.energyCapacity)
+				}
+			})
+		}
+
 		if (targets.length > 0) {
 			if (this.creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 				this.moveToMinCPU(targets[0]);

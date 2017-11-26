@@ -1,10 +1,10 @@
 var Role = require('Role')
 
 class Harvester extends Role {
-	constructor(creep, source) {
+	constructor(creep, sourceID) {
 		//this.creep = creep;
 		super(creep)
-		this.source = source;
+		this.source = Game.getObjectById(sourceID);
 	}
 	harvests() {
 		if (this.creep.harvest(this.source) == ERR_NOT_IN_RANGE) {

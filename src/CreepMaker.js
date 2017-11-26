@@ -1,7 +1,17 @@
 class CreepMaker {
 	constructor(room, creeps) {
 		this.room = room;
-		this.spawns = room.find(FIND_MY_SPAWNS);
+
+		if (this.room.memory.spawnIDs == undefined || Game.time % 500 == 0) {
+			var spawns = this.room.find(FIND_MY_SPAWNS);
+			var forMem = [];
+			for (var name in spawns) {
+				forMem.push(spawns[name].id);
+			}
+			this.room.memory.spawnIDs = forMem;
+		}
+		this.spawnIDs = this.room.memory.spawnIDs;
+
 		this.startingConfig = [WORK, CARRY, MOVE];
 		this.roomStage = this.room.memory.stage;
 		this.creeps = creeps;
@@ -40,12 +50,12 @@ class CreepMaker {
 	}
 
 	removeOldCreeps() {
-		if (this.room.memory.checkTick == 25) {
+		if (Game.time % 25 == 0) {
 			var foundOne = false;
 			for (var name in this.creeps) {
 				if (this.creeps[name].memory.stage < this.roomStage && !foundOne) {
 					var role = this.creeps[name].memory.role;
-					if (this.spawns[0].spawnCreep(this.creepBuilds[role][this.roomStage], role + Game.time.toString(), {
+					if (Game.getObjectById(this.spawnIDs[0]).spawnCreep(this.creepBuilds[role][this.roomStage], role + Game.time.toString(), {
 
 							dryRun: true
 						}) == OK) {
@@ -64,7 +74,7 @@ class CreepMaker {
 		for (var k in this.buildOrder) {
 			var onRole = this.buildOrder[k];
 			if (this.room.memory.roles[onRole] < this.creepNumbers[onRole] && !foundOne) {
-				if (this.spawns[0].spawnCreep(this.creepBuilds[onRole][this.roomStage], onRole + Game.time.toString(), {
+				if (Game.getObjectById(this.spawnIDs[0]).spawnCreep(this.creepBuilds[onRole][this.roomStage], onRole + Game.time.toString(), {
 						memory: {
 							role: onRole,
 							stage: this.roomStage
@@ -76,29 +86,6 @@ class CreepMaker {
 		}
 	}
 
-	// spawn() {
-	// 	if (this.room.memory.harvesters < 4) {
-	// 		var newName = this.spawns[0].createCreep(this.creepBuilds.harvester[this.roomStage], undefined, {
-	// 			role: 'harvester',
-	// 			stage: this.roomStage
-	// 		});
-	// 	} else if (this.room.memory.carriers < 4) {
-	// 		var newName = this.spawns[0].createCreep(this.creepBuilds.carrier[this.roomStage], undefined, {
-	// 			role: 'carrier',
-	// 			stage: this.roomStage
-	// 		});
-	// 	} else if (this.room.memory.upgraders < 2) {
-	// 		var newName = this.spawns[0].createCreep(this.creepBuilds.upgrader[this.roomStage], undefined, {
-	// 			role: 'upgrader',
-	// 			stage: this.roomStage
-	// 		});
-	// 	} else if (this.room.memory.builders < 2) {
-	// 		var newName = this.spawns[0].createCreep(this.creepBuilds.builder[this.roomStage], undefined, {
-	// 			role: 'builder',
-	// 			stage: this.roomStage
-	// 		});
-	// 	}
-	// }
 	cleanup() {
 		for (var name in Memory.creeps) {
 			if (!Game.creeps[name]) {

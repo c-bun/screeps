@@ -8,7 +8,15 @@ class JobManager {
 	constructor(room, creeps) {
 		this.room = room;
 		this.creeps = creeps;
-		this.sources = this.room.find(FIND_SOURCES); //TODO make this run only once and store in mem
+		if (this.room.memory.sourceIDs == undefined) {
+			var sources = this.room.find(FIND_SOURCES);
+			var forMem = [];
+			for (var name in sources) {
+				forMem.push(sources[name].id);
+			}
+			this.room.memory.sourceIDs = forMem;
+		}
+		this.sourceIDs = this.room.memory.sourceIDs;
 	}
 
 	run() {
@@ -20,7 +28,7 @@ class JobManager {
 		var harvesters = _.filter(this.creeps, (creep) => creep.memory.role == 'harvester');
 		this.room.memory.roles.harvester = harvesters.length;
 		for (var name in harvesters) {
-			var creep = new Harvester(harvesters[name], this.sources[s % this.sources.length]);
+			var creep = new Harvester(harvesters[name], this.sourceIDs[s % this.sourceIDs.length]);
 			s++;
 			creep.run()
 		}
