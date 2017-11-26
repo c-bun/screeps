@@ -8,9 +8,13 @@ class Carrier extends Role {
 		this.creep = creep;
 		this.harvester = harvester;
 		this.isFull = (this.creep.carry.energy == this.creep.carryCapacity);
+		this.droppingOff = this.creep.memory.droppingOff;
 	}
 	dropOff() {
-		super.depositEnergy();
+		this.creep.memory.droppingOff = true;
+		if (super.depositEnergy()) {
+			this.creep.memory.droppingOff = false;
+		}
 	}
 	gather() {
 		if (this.harvester) {
@@ -22,7 +26,7 @@ class Carrier extends Role {
 	}
 	run() {
 		if (!super.renew()) {
-			if (this.isFull) {
+			if (this.isFull || this.droppingOff) {
 				this.dropOff();
 			} else {
 				this.gather();

@@ -7,9 +7,9 @@ class CreepMaker {
 		this.creeps = creeps;
 
 		this.creepNumbers = {
-			harvester: 2,
-			carrier: 2,
-			upgrader: 0,
+			harvester: 3,
+			carrier: 3,
+			upgrader: 2,
 			builder: 1
 		}
 

@@ -11,11 +11,11 @@ class Upgrader extends Role {
 	}
 	upgrade() {
 		if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE) {
-			//super.moveToMinCPU(this.creep.room.controller);
-			this.creep.moveTo(this.creep.room.controller, {
-				ignoreCreeps: true,
-				maxOps: 4000
-			});
+			super.moveToMinCPU(this.creep.room.controller);
+			// this.creep.moveTo(this.creep.room.controller, {
+			// 	ignoreCreeps: true,
+			// 	maxOps: 4000
+			// });
 		}
 	}
 	run() {

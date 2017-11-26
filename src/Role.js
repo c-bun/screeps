@@ -19,6 +19,8 @@ class Role {
 
 	depositEnergy() {
 		// Defaults to spawns and extensions, then containers. TODO what about towers?
+		// Return true if all energy has been deposited. else return false.
+		var depositedAll = false;
 		var targets = this.creep.room.find(FIND_STRUCTURES, {
 			filter: (structure) => {
 				return (structure.structureType ==
@@ -30,6 +32,8 @@ class Role {
 		if (targets.length > 0) {
 			if (this.creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 				this.moveToMinCPU(targets[0]);
+			} else if (this.creep.carry.energy == 0) {
+				depositedAll = true;
 			}
 		} else {
 			var containersWithEnergy = this.creep.room.find(FIND_STRUCTURES, {
@@ -42,9 +46,12 @@ class Role {
 				var closestContainer = this.creep.pos.findClosestByRange(containersWithEnergy);
 				if (this.creep.transfer(closestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 					this.moveToMinCPU(closestContainer);
+				} else if (this.creep.carry.energy == 0) {
+					depositedAll = true;
 				}
 			}
 		}
+		return depositedAll;
 	}
 
 	recycleSelf() {
