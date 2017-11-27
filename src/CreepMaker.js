@@ -20,7 +20,7 @@ class CreepMaker {
 			harvester: 3,
 			carrier: 3,
 			upgrader: 2,
-			builder: 1
+			builder: 2
 		}
 
 		this.buildOrder = ['harvester', 'carrier', 'upgrader', 'builder'];

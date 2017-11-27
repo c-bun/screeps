@@ -25,7 +25,7 @@ class Role {
 		// Return true if all energy has been deposited. else return false.
 		var depositedAll = false;
 
-		if (this.destination == undefined && this.needsEnergy != undefined) {
+		if (this.destination == undefined && this.needsEnergy[0] != undefined) {
 			this.destination = Game.getObjectById(this.needsEnergy[0].id);
 		}
 		if (this.creep.transfer(this.destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
