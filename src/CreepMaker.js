@@ -34,7 +34,7 @@ class CreepMaker {
 			carrier: [
 				[CARRY, MOVE, MOVE],
 				[CARRY, CARRY, MOVE, MOVE, MOVE],
-				[CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+				[CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE]
 			],
 			upgrader: [
 				[WORK, CARRY, MOVE],

@@ -20,37 +20,47 @@ class Economy {
 	}
 
 	allocateResources() {
-		var energyStorageAreas = this.creep.room.find(FIND_STRUCTURES, {
+
+		var energyStorageAreas = this.room.find(FIND_STRUCTURES, {
 			filter: (structure) => {
 				return (structure.structureType == STRUCTURE_TOWER ||
 					structure.structureType == STRUCTURE_EXTENSION ||
 					structure.structureType == STRUCTURE_SPAWN ||
-					structure.structureType == STRUCTURE_CONTAINER || )
+					structure.structureType == STRUCTURE_CONTAINER)
 			}
 		})
-		var energyTo = undefined;
+
+		var energyTo = [];
 		if (this.roomStatus == 'under attack') {
 			energyTo = _.filter(energyStorageAreas, (structure) => {
-				structure.structureType == STRUCTURE_TOWER
-			})
-		} else if (Game.time % 10 == 0) {
+				return
+				structure.structureType == STRUCTURE_TOWER;
+			});
+		} else {
 			var containers = _.filter(energyStorageAreas, (structure) => {
-				structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000
-			})
+				return
+				structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000;
+			});
 			var spawnsAndExtensions = _.filter(energyStorageAreas, (structure) => {
-				(structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION) &&
-				structure.energy < structure.energyCapacity
-			})
+				return (structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION) &&
+					structure.energy < structure.energyCapacity;
+			});
+
 			var towers = _.filter(energyStorageAreas, (structure) => {
-				structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity
-			})
-			// TODO load up towers (if under 30%), then spawns and extensions, then containers.
+				return (structure.structureType == STRUCTURE_TOWER) && (structure.energy < structure.energyCapacity * 0.5);
+			});
+			// Load up towers (if under 30%), then spawns and extensions, then containers.
+			var energyTo = towers.concat(spawnsAndExtensions).concat(containers);
 		}
+
 		return energyTo
 	}
 
 	run() {
 		this.updateStage();
+		if (Game.time % 10 == 0) {
+			this.room.memory.needsEnergy = this.allocateResources();
+		}
 	}
 }
 

@@ -6,6 +6,8 @@ class Role {
 		this.stage = this.creep.memory.stage;
 		this.roomStage = this.creep.room.memory.stage;
 		this.underAttack = this.creep.room.memory.underAttack;
+		this.needsEnergy = this.creep.room.memory.needsEnergy
+		this.destination = this.creep.memory.destination;
 	}
 
 	moveToMinCPU(destination) {
@@ -22,45 +24,15 @@ class Role {
 		// Defaults to spawns and extensions, then containers. TODO what about towers?
 		// Return true if all energy has been deposited. else return false.
 		var depositedAll = false;
-		var targets;
-		if (this.underAttack) {
-			targets = this.creep.room.find(FIND_STRUCTURES, {
-				filter: (structure) => {
-					return structure.structureType == STRUCTURE_TOWER
-				}
-			})
-		} else {
-			targets = this.creep.room.find(FIND_STRUCTURES, {
-				filter: (structure) => {
-					return (structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity * .25) ||
-						((structure.structureType == STRUCTURE_EXTENSION || structure.structureType ==
-								STRUCTURE_SPAWN) &&
-							structure.energy < structure.energyCapacity)
-				}
-			})
-		}
 
-		if (targets.length > 0) {
-			if (this.creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-				this.moveToMinCPU(targets[0]);
-			} else if (this.creep.carry.energy == 0) {
-				depositedAll = true;
-			}
-		} else {
-			var containersWithEnergy = this.creep.room.find(FIND_STRUCTURES, {
-				filter: (i) => {
-					return i.structureType == STRUCTURE_CONTAINER &&
-						i.store[RESOURCE_ENERGY] < 2000;
-				}
-			});
-			if (containersWithEnergy.length > 0) {
-				var closestContainer = this.creep.pos.findClosestByRange(containersWithEnergy);
-				if (this.creep.transfer(closestContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-					this.moveToMinCPU(closestContainer);
-				} else if (this.creep.carry.energy == 0) {
-					depositedAll = true;
-				}
-			}
+		if (this.destination == undefined && this.needsEnergy != undefined) {
+			this.destination = Game.getObjectById(this.needsEnergy[0].id);
+		}
+		if (this.creep.transfer(this.destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+			this.moveToMinCPU(this.destination);
+		} else if (this.creep.carry.energy == 0) {
+			depositedAll = true;
+			this.destination = undefined;
 		}
 		return depositedAll;
 	}
