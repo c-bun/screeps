@@ -38,14 +38,13 @@ class Economy {
 		var energyTo = [];
 		if (this.roomStatus == 'under attack') {
 			energyTo = _.filter(energyStorageAreas, (structure) => {
-				return
-				structure.structureType == STRUCTURE_TOWER;
+				return structure.structureType == STRUCTURE_TOWER;
 			});
 		} else {
 			var containers = _.filter(energyStorageAreas, (structure) => {
-				return
-				structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000;
+				return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000;
 			});
+
 			var spawnsAndExtensions = _.filter(energyStorageAreas, (structure) => {
 				return (structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION) &&
 					structure.energy < structure.energyCapacity;
@@ -55,7 +54,7 @@ class Economy {
 				return (structure.structureType == STRUCTURE_TOWER) && (structure.energy < structure.energyCapacity * 0.5);
 			});
 			// Load up towers (if under 30%), then spawns and extensions, then containers.
-			var energyTo = towers.concat(spawnsAndExtensions).concat(containers);
+			energyTo = towers.concat(spawnsAndExtensions).concat(containers);
 		}
 
 		return energyTo
@@ -90,7 +89,7 @@ class Economy {
 
 	run() {
 		this.updateStage();
-		if (Game.time % 10 == 0) {
+		if (Game.time % 3 == 0) {
 			this.room.memory.needsEnergy = this.findNeedsEnergy(); // Probably should not run this in earlier room stages. Not necessary.
 			this.room.memory.hasEnergy = this.findExtraEnergy();
 		}

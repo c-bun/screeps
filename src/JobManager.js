@@ -56,7 +56,7 @@ class JobManager {
 			creep.run()
 		}
 
-		var noRoles = _.filter(this.creeps, (creep) => creep.memory.role == undefined);
+		var noRoles = _.filter(this.creeps, (creep) => creep.memory.role == 'retired');
 		for (var name in noRoles) {
 			var creep = new Role(noRoles[name]);
 			creep.run()

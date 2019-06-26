@@ -29,12 +29,12 @@ class CreepMaker {
 			// harvesters should be made to barely be able to move but be much faster at harvesting
 			harvester: [
 				[WORK, CARRY, MOVE],
-				[WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+				[WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
 				[WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE]
 			],
 			carrier: [
 				[CARRY, MOVE, MOVE],
-				[CARRY, CARRY, MOVE, MOVE, MOVE],
+				[CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
 				[CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE]
 			],
 			upgrader: [
@@ -61,7 +61,7 @@ class CreepMaker {
 							dryRun: true
 						}) == OK) {
 						foundOne = true;
-						this.creeps[name].memory.role = undefined;
+						this.creeps[name].memory.role = 'retired';
 						this.creeps[name].memory.recycle = true;
 						console.log('Setting ' + this.creeps[name].toString() + ' to be upgraded.');
 					}
