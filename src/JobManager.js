@@ -40,6 +40,9 @@ class JobManager {
 			h++;
 			creep.run()
 		}
+
+		// TODO Would be smart to get rid of upgraders if the energy to next upgrade is way out of their ability.
+		// But might need some trickle of energy to maintain control of room??
 		var upgraders = _.filter(this.creeps, (creep) => creep.memory.role == 'upgrader');
 		this.room.memory.roles.upgrader = upgraders.length;
 		for (var name in upgraders) {

@@ -15,11 +15,16 @@ class Economy {
 		if (Game.time % 50 == 0) {
 			if (this.room.energyAvailable >= this.roomStages[this.stage]) {
 				this.room.memory.stage += 1;
+				console.log('Increasing stage of room ' + this.room.toString() + ' to ' + this.room.memory.stage);
 			};
 		};
+		if (Game.time % 10 == 0) {
+			console.log('Room ' + this.room.toString() + ' energy avail: ' + this.room.energyAvailable);
+			console.log(this.roomStages[this.room.memory.stage]-this.room.energyAvailable + ' remaining to next stage.');
+		}
 	}
 
-	allocateResources() {
+	findNeedsEnergy() {
 
 		var energyStorageAreas = this.room.find(FIND_STRUCTURES, {
 			filter: (structure) => {
@@ -56,10 +61,23 @@ class Economy {
 		return energyTo
 	}
 
+	findExtraEnergy() {
+		var energyFrom = [];
+		var containersWithEnergy = _.filter(energyStorageAreas, (structure) => {
+			return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0;
+		});
+		if (this.room.energyCapacityAvailable > 300 && this.room.energyCapacityAvailable * 0.8 < this.room.energyAvailable) {
+			var extensionsWithEnergy = _.filter(energyStorageAreas, (structure) => {
+				return structure.structureType == STRUCTURE_EXTENSION && structure.energy == structure.energyCapacity;
+			});
+		}
+		energyFrom.concat(containersWithEnergy).concat(extensionsWithEnergy)
+	}
+
 	run() {
 		this.updateStage();
 		if (Game.time % 10 == 0) {
-			this.room.memory.needsEnergy = this.allocateResources();
+			this.room.memory.needsEnergy = this.findNeedsEnergy(); // Probably should not run this in earlier room stages. Not necessary.
 		}
 	}
 }

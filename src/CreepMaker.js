@@ -81,6 +81,7 @@ class CreepMaker {
 						}
 					}) == OK) {
 					foundOne = true;
+					console.log('Spawning a ' + onRole + '...');
 				}
 			}
 		}

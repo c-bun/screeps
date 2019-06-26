@@ -24,5 +24,7 @@ module.exports.loop = function() {
 		creepMaker.run();
 
 	}
-	console.log('CPU used on: ' + Game.time.toString() + ' is: ' + Game.cpu.getUsed())
+	if (Game.time % 10 == 0) {
+		console.log('CPU used on: ' + Game.time.toString() + ' is: ' + Game.cpu.getUsed());
+	}
 }

@@ -8,6 +8,7 @@ var subroutines = {
 			creep.moveTo(destination);
 		}
 	},
+	// This does not work well. Should not be pulling energy out of spawn or extensions as much.
 	withdrawEnergy: function(creep) {
 		var containersWithEnergy = creep.room.find(FIND_STRUCTURES, {
 			filter: function(i) {
