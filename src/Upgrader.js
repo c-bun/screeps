@@ -7,7 +7,7 @@ class Upgrader extends Role {
 		this.creep = creep;
 	}
 	getEnergy() {
-		subroutines.withdrawEnergy(this.creep)
+		super.withdrawEnergy(this.creep)
 	}
 	upgrade() {
 		if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE) {

@@ -6,8 +6,9 @@ class Role {
 		this.stage = this.creep.memory.stage;
 		this.roomStage = this.creep.room.memory.stage;
 		this.underAttack = this.creep.room.memory.underAttack;
-		this.needsEnergy = this.creep.room.memory.needsEnergy
-		this.destination = this.creep.memory.destination;
+		this.needsEnergy = this.creep.room.memory.needsEnergy;
+		this.hasEnergy = this.creep.room.memory.hasEnergy;
+		this.destination = this.creep.memory.destination; // TODO destinations should not be determined every tick
 	}
 
 	moveToMinCPU(destination) {
@@ -19,6 +20,22 @@ class Role {
 			this.creep.moveTo(destination);
 		}
 	}
+
+	withdrawEnergy() {
+		// see if economy found extra energy.
+
+		if (this.hasEnergy.length > 0) {
+			this.destination = Game.getObjectById(this.hasEnergy[0].id);
+			if (this.creep.withdraw(this.destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+			this.moveToMinCPU(this.destination)
+			}
+		} else {
+			var toHarvest = this.creep.room.find(FIND_SOURCES);
+			var closestSource = this.creep.pos.findClosestByRange(toHarvest);
+			subroutines.harvestEnergy(this.creep, closestSource);
+		}
+
+}
 
 	depositEnergy() {
 		// Defaults to spawns and extensions, then containers. TODO what about towers?

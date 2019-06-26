@@ -19,13 +19,14 @@ class CreepMaker {
 		this.creepNumbers = {
 			harvester: 3,
 			carrier: 3,
-			upgrader: 2,
+			upgrader: 2, // Eventually should merge upgraders and builders so that the job switches based on need.
 			builder: 2
 		}
 
 		this.buildOrder = ['harvester', 'carrier', 'upgrader', 'builder'];
 
 		this.creepBuilds = {
+			// harvesters should be made to barely be able to move but be much faster at harvesting
 			harvester: [
 				[WORK, CARRY, MOVE],
 				[WORK, WORK, CARRY, CARRY, MOVE, MOVE],
@@ -62,6 +63,7 @@ class CreepMaker {
 						foundOne = true;
 						this.creeps[name].memory.role = undefined;
 						this.creeps[name].memory.recycle = true;
+						console.log('Setting ' + this.creeps[name].toString() + ' to be upgraded.');
 					}
 				}
 			}

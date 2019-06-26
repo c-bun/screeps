@@ -70,7 +70,7 @@ class Builder extends Role {
 					//subroutines.depositToSpawn(this.creep);
 				}
 			} else {
-				subroutines.withdrawEnergy(this.creep);
+				super.withdrawEnergy();
 			}
 		}
 	}

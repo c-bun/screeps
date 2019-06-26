@@ -62,22 +62,37 @@ class Economy {
 	}
 
 	findExtraEnergy() {
-		var energyFrom = [];
+
+		var energyStorageAreas = this.room.find(FIND_STRUCTURES, {
+			filter: (structure) => {
+				return (structure.structureType == STRUCTURE_TOWER ||
+					structure.structureType == STRUCTURE_EXTENSION ||
+					structure.structureType == STRUCTURE_SPAWN ||
+					structure.structureType == STRUCTURE_CONTAINER)
+			}
+		})
+
+
 		var containersWithEnergy = _.filter(energyStorageAreas, (structure) => {
 			return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] > 0;
 		});
-		if (this.room.energyCapacityAvailable > 300 && this.room.energyCapacityAvailable * 0.8 < this.room.energyAvailable) {
-			var extensionsWithEnergy = _.filter(energyStorageAreas, (structure) => {
+		var extensionsWithEnergy = [];
+		if (this.room.energyCapacityAvailable > 300 && this.room.energyCapacityAvailable * 0.75 < this.room.energyAvailable) {
+			extensionsWithEnergy = _.filter(energyStorageAreas, (structure) => {
 				return structure.structureType == STRUCTURE_EXTENSION && structure.energy == structure.energyCapacity;
 			});
 		}
-		energyFrom.concat(containersWithEnergy).concat(extensionsWithEnergy)
+
+		var energyFrom = containersWithEnergy.concat(extensionsWithEnergy)
+
+		return energyFrom
 	}
 
 	run() {
 		this.updateStage();
 		if (Game.time % 10 == 0) {
 			this.room.memory.needsEnergy = this.findNeedsEnergy(); // Probably should not run this in earlier room stages. Not necessary.
+			this.room.memory.hasEnergy = this.findExtraEnergy();
 		}
 	}
 }
