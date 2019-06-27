@@ -17,13 +17,14 @@ class Harvester extends Role {
 		}
 	}
 	run() {
-		if (!super.renew()) {
+		if (!super.run()) {
 			if (this.creep.carry.energy < this.creep.carryCapacity) {
 				this.harvests()
 			} else {
 				this.dumps()
 			}
 		}
+		super.updateMemory()
 	}
 }
 

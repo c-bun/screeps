@@ -20,7 +20,7 @@ class Economy {
 		};
 		if (Game.time % 10 == 0) {
 			console.log('Room ' + this.room.toString() + ' energy avail: ' + this.room.energyAvailable);
-			console.log(this.roomStages[this.room.memory.stage]-this.room.energyAvailable + ' remaining to next stage.');
+			console.log(this.roomStages[this.room.memory.stage] - this.room.energyAvailable + ' remaining to next stage.');
 		}
 	}
 
@@ -90,6 +90,7 @@ class Economy {
 	run() {
 		this.updateStage();
 		if (Game.time % 3 == 0) {
+			// TODO these lists need to be serialized! get the ids of all the structures!!
 			this.room.memory.needsEnergy = this.findNeedsEnergy(); // Probably should not run this in earlier room stages. Not necessary.
 			this.room.memory.hasEnergy = this.findExtraEnergy();
 		}

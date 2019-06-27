@@ -46,7 +46,7 @@ class Builder extends Role {
 	}
 
 	run() {
-		if (!super.renew()) {
+		if (!super.run()) {
 			// determine whether building or obtaining energy.
 			if (this.building && this.creep.carry.energy == 0) {
 				this.setBuilding(false);
@@ -75,6 +75,7 @@ class Builder extends Role {
 				super.withdrawEnergy();
 			}
 		}
+		super.updateMemory()
 	}
 }
 

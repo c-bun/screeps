@@ -7,7 +7,7 @@ class Upgrader extends Role {
 		this.creep = creep;
 	}
 	getEnergy() {
-		super.withdrawEnergy(this.creep)
+		super.withdrawEnergy()
 	}
 	upgrade() {
 		if (this.creep.upgradeController(this.creep.room.controller) == ERR_NOT_IN_RANGE) {
@@ -19,7 +19,7 @@ class Upgrader extends Role {
 		}
 	}
 	run() {
-		if (!super.renew()) {
+		if (!super.run()) {
 			if (this.creep.memory.upgrading && this.creep.carry.energy == 0) {
 				this.creep.memory.upgrading = false;
 				this.creep.say('withdrawing');
@@ -34,6 +34,7 @@ class Upgrader extends Role {
 				this.getEnergy();
 			}
 		}
+		super.updateMemory()
 	}
 }
 

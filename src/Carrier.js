@@ -25,13 +25,14 @@ class Carrier extends Role {
 		}
 	}
 	run() {
-		if (!super.renew()) {
+		if (!super.run()) {
 			if (this.isFull || this.droppingOff) {
 				this.dropOff();
 			} else {
 				this.gather();
 			}
 		}
+		super.updateMemory()
 	}
 }
 
