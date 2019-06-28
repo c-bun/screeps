@@ -64,7 +64,7 @@ class Role {
 		if (this.activity != 'depositing') {
 			this.activity = 'depositing';
 			if (this.needsEnergy.length > 0) {
-				this.destination = this.needsEnergy[0]
+				this.destination = Game.getObjectById(this.needsEnergy[0]);
 			} else {
 				this.activity = 'waiting'
 				return depositedAll

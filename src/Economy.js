@@ -35,29 +35,28 @@ class Economy {
 			}
 		})
 
-		var energyTo = [];
-		if (this.roomStatus == 'under attack') {
-			energyTo = _.filter(energyStorageAreas, (structure) => {
-				return structure.structureType == STRUCTURE_TOWER;
-			});
-		} else {
-			var containers = _.filter(energyStorageAreas, (structure) => {
-				return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000;
-			});
+		var containers = _.filter(energyStorageAreas, (structure) => {
+			return structure.structureType == STRUCTURE_CONTAINER && structure.store[RESOURCE_ENERGY] < 2000;
+		});
 
-			var spawnsAndExtensions = _.filter(energyStorageAreas, (structure) => {
-				return (structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION) &&
-					structure.energy < structure.energyCapacity;
-			});
+		var spawnsAndExtensions = _.filter(energyStorageAreas, (structure) => {
+			return (structure.structureType == STRUCTURE_SPAWN || structure.structureType == STRUCTURE_EXTENSION) &&
+				structure.energy < structure.energyCapacity;
+		});
 
-			var towers = _.filter(energyStorageAreas, (structure) => {
-				return (structure.structureType == STRUCTURE_TOWER) && (structure.energy < structure.energyCapacity * 0.5);
-			});
-			// Load up towers (if under 30%), then spawns and extensions, then containers.
-			energyTo = towers.concat(spawnsAndExtensions).concat(containers);
+		var towers = [];
+		towers = _.filter(energyStorageAreas, (structure) => {
+			return (structure.structureType == STRUCTURE_TOWER) && (structure.energy < structure.energyCapacity * 0.5);
+		});
+		// Load up towers (if under 30%), then spawns and extensions, then containers.
+		var energyTo = towers.concat(spawnsAndExtensions).concat(containers);
+
+		var energyToIds = []
+		for (var area in energyTo) {
+			energyToIds.push(area.id)
 		}
 
-		return energyTo
+		return energyToIds
 	}
 
 	findExtraEnergy() {
@@ -84,7 +83,12 @@ class Economy {
 
 		var energyFrom = containersWithEnergy.concat(extensionsWithEnergy)
 
-		return energyFrom
+		var energyFromIds = []
+		for (var area in energyFrom) {
+			energyFromIds.push(area.id)
+		}
+
+		return energyFromIds
 	}
 
 	run() {
